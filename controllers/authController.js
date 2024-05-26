@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 const User = require("../models/userSchema");
-
+const Admin = require("../models/AdminSchema")
 // User registration (signup)
 router.post("/signup", async (req, res) => {
   const { firstName, lastName, phone, birthday, email, password } = req.body;
@@ -77,6 +77,61 @@ router.post("/login", async (req, res) => {
 
         // Set token in local storage (example using localStorage)
         localStorage.setItem("token", token);
+      }
+    );
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+
+router.post("/Adminlogin", async (req, res) => {
+  const { username, password } = req.body;
+
+  try {
+    // Check if the username and password are provided
+    if (!username || !password) {
+      return res.status(400).json({ msg: "Please provide username and password" });
+    }
+
+    // Find the admin by username
+    let admin = await Admin.findOne({ username });
+
+    // If no admin found, return error
+    if (!admin) {
+      return res.status(400).json({ msg: "Username not found!" });
+    }
+
+    // Compare the provided password with the stored hashed password
+    const isMatch = await bcrypt.compare(password, admin.password);
+
+    // If the passwords do not match, return error
+    if (!isMatch) {
+      return res.status(400).json({ msg: "Invalid Password" });
+    }
+
+    // Create a payload for the JWT
+    const payload = {
+      user: {
+        id: admin.id,
+        username: admin.username, // Corrected typo from userame to username
+      },
+    };
+
+    // Sign the JWT
+    jwt.sign(
+      payload,
+      process.env.JWT_SECRETKEY,
+      { expiresIn: "900s" },
+      (err, token) => {
+        if (err) throw err;
+
+        // Set token in cookies
+        res.cookie("token", token, {
+          httpOnly: false,
+        });
+        res.json({ token, user: payload.user });
+
       }
     );
   } catch (err) {

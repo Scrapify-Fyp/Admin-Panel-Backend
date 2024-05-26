@@ -13,7 +13,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: 'http://localhost:5173',        
     credentials: true, // Allow credentials (cookies)
   })
 );
@@ -21,6 +21,7 @@ app.use(cookieParser());
 
 //all the routes.
 const userRouter = require("./controllers/userController");
+const adminRouter = require("./controllers/AdminController");
 const productRouter = require("./controllers/productController");
 const authRouter = require("./controllers/authController");
 const shopRouter = require("./controllers/shopController");
@@ -35,13 +36,11 @@ app.get("/profile", authMiddleware, (req, res) => {
 
   res.json(userID);
 });
-app.get("/login", (req, res) => {
-  res.render("login.ejs");
-});
 
 app.use("/", authRouter);
 app.use("/", productRouter);
 app.use("/", userRouter);
+app.use("/", adminRouter);
 app.use("/", shopRouter);
 
 try {
