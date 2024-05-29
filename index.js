@@ -20,7 +20,7 @@ app.use(
 app.use(cookieParser());
 
 //all the routes.
-const userRouter = require("./controllers/userController");
+// const userRouter = require("./controllers/userController");
 const adminRouter = require("./controllers/AdminController");
 const productRouter = require("./controllers/productController");
 const authRouter = require("./controllers/authController");
@@ -39,7 +39,7 @@ app.get("/profile", authMiddleware, (req, res) => {
 
 app.use("/", authRouter);
 app.use("/", productRouter);
-app.use("/", userRouter);
+// app.use("/", userRouter);
 app.use("/", adminRouter);
 app.use("/", shopRouter);
 
