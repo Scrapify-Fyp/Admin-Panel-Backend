@@ -91,7 +91,7 @@ const Admin = require("../models/AdminSchema")
 //Admin authentication
 router.post("/Adminlogin", async (req, res) => {
   const { username, password } = req.body;
-
+  console.log(username , password);
   try {
     // Check if the username and password are provided
     if (!username || !password) {
