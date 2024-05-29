@@ -116,28 +116,23 @@ router.post("/Adminlogin", async (req, res) => {
 
     // Create a payload for the JWT
     const payload = {
-      user: {
+      admin: {
         id: admin.id,
-        username: admin.username, // Corrected typo from userame to username
+        username: admin.username, 
       },
     };
 
     // Sign the JWT
-    jwt.sign(
-      payload,
-      process.env.JWT_SECRETKEY,
-      { expiresIn: "900s" },
-      (err, token) => {
-        if (err) throw err;
+    const token = jwt.sign(payload, process.env.JWT_SECRETKEY, { expiresIn: '900s' });
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production', // Set to true in production
+      sameSite: 'strict',
+      maxAge: 900000, // 900s = 15 minutes
+    });
+    res.json({ token, admin: payload.admin });
 
-        // Set token in cookies
-        res.cookie("token", token, {
-          httpOnly: false,
-        });
-        res.json({ token, user: payload.user });
-
-      }
-    );
+    
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");

@@ -120,11 +120,22 @@ router.patch("/users/:id", async (req, res) => {
 });
 
 // DELETE delete a user by ID
-router.delete("/users/:id", getUser, async (req, res) => {
+router.delete('/users/:id', async (req, res) => {
+  const userId = req.params.id;
+
   try {
-    await res.user.remove();
-    res.json({ message: "User deleted" });
+    // Find the user by ID and delete it
+    const deletedUser = await User.findByIdAndDelete(userId);
+
+    if (!deletedUser) {
+      // If the user with the given ID doesn't exist, send a 404 Not Found response
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // If the user is successfully deleted, send a 200 OK response
+    res.json({ message: 'User deleted', deletedUser });
   } catch (error) {
+    // If an error occurs during the deletion process, send a 500 Internal Server Error response
     res.status(500).json({ message: error.message });
   }
 });
