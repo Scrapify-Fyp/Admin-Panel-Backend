@@ -152,65 +152,69 @@ router.post("/products", async (req, res) => {
 
 // PATCH update a product by ID
 router.patch("/products/:id", getProduct, async (req, res) => {
-  console.log("🚀 ~ router.post ~ product:", product);
-  if (req.body.name != null) {
-    res.product.name = req.body.name;
-  }
-  if (req.body.description != null) {
-    res.product.description = req.body.description;
-  }
-  if (req.body.price != null) {
-    res.product.price = req.body.price;
-  }
-  if (req.body.category != null) {
-    res.product.category = req.body.category;
-  }
-  if (req.body.stockQuantity != null) {
-    res.product.stockQuantity = req.body.stockQuantity;
-  }
-  if (req.body.imageURL != null) {
-    res.product.imageURL = req.body.imageURL;
-  }
-  if (req.body.brand != null) {
-    res.product.brand = req.body.brand;
-  }
-  if (req.body.weight != null) {
-    res.product.weight = req.body.weight;
-  }
-  if (req.body.dimensions != null) {
-    if (req.body.dimensions.length != null) {
-      res.product.dimensions.length = req.body.dimensions.length;
-    }
-    if (req.body.dimensions.width != null) {
-      res.product.dimensions.width = req.body.dimensions.width;
-    }
-    if (req.body.dimensions.height != null) {
-      res.product.dimensions.height = req.body.dimensions.height;
-    }
-  }
-  if (req.body.color != null) {
-    res.product.color = req.body.color;
-  }
-  if (req.body.material != null) {
-    res.product.material = req.body.material;
-  }
-  if (req.body.keywords != null) {
-    res.product.keywords = req.body.keywords;
-  }
-  if (req.body.rating != null) {
-    res.product.rating = req.body.rating;
-  }
-  if (req.body.relatedProducts != null) {
-    res.product.relatedProducts = req.body.relatedProducts;
-  }
-  if (req.body.discounts != null) {
-    res.product.discounts = req.body.discounts;
-  }
-  if (req.body.availabilityStatus != null) {
-    res.product.availabilityStatus = req.body.availabilityStatus;
-  }
-
+  // console.log("🚀 ~ router.post ~ product:", product);
+  
   try {
+    if (!res.product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+    if (req.body.name != null) {
+      res.product.name = req.body.name;
+    }
+    if (req.body.description != null) {
+      res.product.description = req.body.description;
+    }
+    if (req.body.price != null) {
+      res.product.price = req.body.price;
+    }
+    if (req.body.category != null) {
+      res.product.category = req.body.category;
+    }
+    if (req.body.stockQuantity != null) {
+      res.product.stockQuantity = req.body.stockQuantity;
+    }
+    if (req.body.imageURL != null) {
+      res.product.imageURL = req.body.imageURL;
+    }
+    if (req.body.brand != null) {
+      res.product.brand = req.body.brand;
+    }
+    if (req.body.weight != null) {
+      res.product.weight = req.body.weight;
+    }
+    if (req.body.dimensions != null) {
+      if (req.body.dimensions.length != null) {
+        res.product.dimensions.length = req.body.dimensions.length;
+      }
+      if (req.body.dimensions.width != null) {
+        res.product.dimensions.width = req.body.dimensions.width;
+      }
+      if (req.body.dimensions.height != null) {
+        res.product.dimensions.height = req.body.dimensions.height;
+      }
+    }
+    if (req.body.color != null) {
+      res.product.color = req.body.color;
+    }
+    if (req.body.material != null) {
+      res.product.material = req.body.material;
+    }
+    if (req.body.keywords != null) {
+      res.product.keywords = req.body.keywords;
+    }
+    if (req.body.rating != null) {
+      res.product.rating = req.body.rating;
+    }
+    if (req.body.relatedProducts != null) {
+      res.product.relatedProducts = req.body.relatedProducts;
+    }
+    if (req.body.discounts != null) {
+      res.product.discounts = req.body.discounts;
+    }
+    if (req.body.availabilityStatus != null) {
+      res.product.availabilityStatus = req.body.availabilityStatus;
+    }
+  
     const updatedProduct = await res.product.save();
     res.json(updatedProduct);
   } catch (error) {
