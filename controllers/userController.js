@@ -15,7 +15,17 @@ router.get("/users", async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
-
+router.get('/users/count', async (req, res) => {
+  try {
+    console.log("hahahhaah");
+    const count = await User.countDocuments();
+    res.json({ count });
+  } catch (err) {
+    console.error(err);
+    console.log("ooooooo");
+    res.status(500).send('Server error');
+  }
+});
 // GET a single user by ID
 router.get("/users/:id", getUser, async (req, res) => {
   const { id } = req.params;
@@ -139,6 +149,7 @@ router.delete('/users/:id', async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
 
 // Middleware function to get user by ID
 async function getUser(req, res, next) {

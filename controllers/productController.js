@@ -16,6 +16,17 @@ router.get("/products", async (req, res) => {
   }
 });
 
+router.get('/products/count', async (req, res) => {
+  try {
+    // console.log("hahahhaah");
+    const count = await Product.countDocuments();
+    res.json({ count });
+  } catch (err) {
+    console.error(err);
+    // console.log("ooooooo");
+    res.status(500).send('Server error');
+  }
+});
 // GET a single product by ID
 router.get("/products/:id", getProduct, async (req, res) => {
   const { id } = req.params;
