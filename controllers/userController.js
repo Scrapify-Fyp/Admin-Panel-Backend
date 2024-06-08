@@ -150,7 +150,30 @@ router.delete('/users/:id', async (req, res) => {
   }
 });
 
+// PATCH update user password
+router.patch('/users/update-password', async (req, res) => {
+  const { userId, oldPassword, newPassword } = req.body;
 
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: 'Old password is incorrect' });
+    }
+
+    const hashedNewPassword = await bcrypt.hash(newPassword, saltRounds);
+    user.password = hashedNewPassword;
+    await user.save();
+
+    res.json({ message: 'Password updated successfully' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
 // Middleware function to get user by ID
 async function getUser(req, res, next) {
   let user;

@@ -93,32 +93,27 @@ router.post("/Adminlogin", async (req, res) => {
   const { username, password } = req.body;
   console.log(username , password);
   try {
-    // Check if the username and password are provided
     if (!username || !password) {
       return res.status(400).json({ msg: "Please provide username and password" });
     }
 
-    // Find the admin by username
     let admin = await Admin.findOne({ username });
 
-    // If no admin found, return error
     if (!admin) {
       return res.status(400).json({ msg: "Username not found!" });
     }
 
-    // Compare the provided password with the stored hashed password
     const isMatch = await bcrypt.compare(password, admin.password);
 
-    // If the passwords do not match, return error
     if (!isMatch) {
       return res.status(400).json({ msg: "Invalid Password" });
     }
 
-    // Create a payload for the JWT
     const payload = {
       admin: {
         id: admin.id,
         username: admin.username, 
+        imageUrl:admin. imageUrl,
       },
     };
 

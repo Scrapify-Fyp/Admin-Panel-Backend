@@ -10,13 +10,10 @@ const authMiddleware = (req, res, next) => {
   }
 
   try {
-    // Verify token
     const decoded = jwt.verify(token, process.env.JWT_SECRETKEY);
 
-    // Attach user or admin information to request object based on your token payload
     req.admin = decoded.admin;
 
-    // Continue to next middleware or route handler
     next();
   } catch (err) {
     console.error(err.message);
