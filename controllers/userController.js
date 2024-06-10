@@ -51,7 +51,23 @@ router.get("/users/:id", getUser, async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+// GET products of a user by vendorId
+router.get("/users/:vendorId/products", async (req, res) => {
+  const vendorId = req.params.vendorId;
 
+  try {
+    const products = await Product.find({ vendorId: vendorId });
+
+    if (products.length === 0) {
+      return res.status(404).json({ message: "No products found for this user" });
+    }
+
+    res.json({ message: "Products retrieved successfully", products: products });
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
 // POST create a new user
 router.post("/users", async (req, res) => {
   const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
