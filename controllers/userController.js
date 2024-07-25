@@ -4,7 +4,7 @@ const User = require("../models/userSchema");
 const bcrypt = require("bcrypt");
 const Product = require("../models/productsSchema");
 
-const saltRounds = 10; // for password hashing, 10 is a good number
+const saltRounds = 10; 
 
 // GET all users
 router.get("/users", async (req, res) => {
